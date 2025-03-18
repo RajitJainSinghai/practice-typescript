@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -116,9 +116,12 @@ const Register = () => {
       {/* Login Option */}
       <p className="mt-4 text-center">
         Already have an account?{' '}
-        <a href="/login" className="text-blue-500">
-          Login here
-        </a>
+        <Link
+                 to="/login"
+                 className="text-blue-500 hover:text-blue-600 font-medium transition-colors duration-200"
+               >
+                 Login here
+               </Link>
       </p>
     </div>
   );

@@ -1,45 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { loadRazorpay } from '../utils/razorpay';
-
-const SAMPLE_GYMS = [
-  {
-    id: '1',
-    name: 'FitZone Elite',
-    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
-    description: 'State-of-the-art fitness facility with expert trainers and modern equipment.',
-    trainers: [
-      { id: '1', name: 'John Smith', specialization: 'Strength Training', price: 50 },
-      { id: '2', name: 'Sarah Johnson', specialization: 'HIIT', price: 45 },
-      { id: '3', name: 'Mike Wilson', specialization: 'CrossFit', price: 55 },
-    ],
-  },
-  {
-    id: '2',
-    name: 'PowerHouse Gym',
-    image: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
-    description: 'High-end gym with advanced machines and personal training programs.',
-    trainers: [
-      { id: '1', name: 'Alex Taylor', specialization: 'Bodybuilding', price: 60 },
-      { id: '2', name: 'Raju singh', specialization: 'Bodybuilding', price: 120 },
-      { id: '3', name: 'Emma Wilson', specialization: 'Yoga', price: 40 },
-    ],
-  },
-  {
-    id: '3',
-    name: 'CrossFit Central',
-    image: 'https://images.unsplash.com/photo-1534367507873-d2d7e24c797f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
-    description: 'High-end gym with advanced machines and personal training programs.',
-    trainers: [
-      { id: '1', name: 'Alex Taylor', specialization: 'Bodybuilding', price: 60 },
-      { id: '2', name: 'Emma Wilson', specialization: 'Yoga', price: 40 },
-      { id: '3', name: 'buudy Wsing', specialization: 'Yoga', price: 20 },
-      { id: '4', name: 'Anshul jain', specialization: 'Yoga', price: 30 },
-      { id: '5', name: 'shubh jain', specialization: 'Yoga', price: 70 },
-      { id: '6', name: 'jayufg dfyea', specialization: 'Yoga', price: 90 },
-    ],
-  },
-];
+import { GYMS } from './gyms';
 
 const Booking = () => {
   const { gymId } = useParams();
@@ -50,15 +12,27 @@ const Booking = () => {
   const [selectedTime, setSelectedTime] = React.useState('');
   const [selectedTrainer, setSelectedTrainer] = React.useState('');
 
-  const gym = SAMPLE_GYMS.find((g) => g.id === gymId);
+  // ✅ Fetch gym from imported GYMS data
+  const gym = GYMS.find((g) => g.id === gymId);
 
   React.useEffect(() => {
     const isLoggedIn = !!localStorage.getItem('user');
     if (!isLoggedIn) {
-      // ✅ Pass the current path to the login page
+      // ✅ Redirect to login if user is not logged in
       navigate('/login', { state: { from: location.pathname } });
     }
   }, [navigate, location.pathname]);
+
+  // Calculate gym and trainer fees
+  const gymFees = gym?.basePrice || 0;
+  const trainerFees = selectedTrainer
+    ? gym?.trainers.find((t) => t.id === selectedTrainer)?.price || 0
+    : 0;
+
+  // Calculate total before GST and GST amount
+  const totalBeforeGST = gymFees + trainerFees;
+  const gstAmount = totalBeforeGST * 0.18;
+  const totalAmount = totalBeforeGST + gstAmount;
 
   const handleBooking = async () => {
     if (!selectedDate || !selectedTime) {
@@ -91,9 +65,7 @@ const Booking = () => {
 
     const options = {
       key: 'rzp_test_zxzai6cmLAtz83',
-      amount: (selectedTrainer
-        ? gym?.trainers.find((t) => t.id === selectedTrainer)?.price
-        : 30) * 100,
+      amount: totalAmount * 100, // Amount in paise (INR)
       currency: 'INR',
       name: gym?.name,
       description: 'Gym Booking Payment',
@@ -149,12 +121,50 @@ const Booking = () => {
               <option value="">No trainer</option>
               {gym.trainers.map((trainer) => (
                 <option key={trainer.id} value={trainer.id}>
-                  {trainer.name} - {trainer.specialization} (${trainer.price}/hour)
+                  {trainer.name} - {trainer.specialization} (₹{trainer.price}/hour)
                 </option>
               ))}
             </select>
           </div>
 
+          {/* Cart Breakdown Table */}
+          <div className="mt-6">
+            <h2 className="text-2xl font-semibold">Booking Details</h2>
+            <table className="table-auto w-full mt-4 text-left">
+              <thead>
+                <tr className="border-b">
+                  <th className="py-2 px-4 text-gray-600">Item</th>
+                  <th className="py-2 px-4 text-gray-600">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b">
+                  <td className="py-2 px-4 text-gray-700">Gym Fees</td>
+                  <td className="py-2 px-4 text-gray-700">₹{gymFees}</td>
+                </tr>
+                {selectedTrainer && (
+                  <tr className="border-b">
+                    <td className="py-2 px-4 text-gray-700">Trainer Fees</td>
+                    <td className="py-2 px-4 text-gray-700">₹{trainerFees}</td>
+                  </tr>
+                )}
+                <tr className="border-b">
+                  <td className="py-2 px-4 font-semibold text-gray-700">Total (before GST)</td>
+                  <td className="py-2 px-4 font-semibold text-gray-700">₹{totalBeforeGST}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="py-2 px-4 text-gray-700">18% GST</td>
+                  <td className="py-2 px-4 text-gray-700">₹{gstAmount.toFixed(2)}</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="py-2 px-4 font-bold text-gray-800">Total Amount</td>
+                  <td className="py-2 px-4 font-bold text-gray-800">₹{totalAmount.toFixed(2)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Proceed to Payment Button */}
           <button
             onClick={handleBooking}
             className="bg-blue-500 text-white mt-4 w-full py-2 rounded-md"
