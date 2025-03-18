@@ -33,6 +33,7 @@ const App = () => {
               <Route path="/gym-owner" element={<GymOwnerDashboard />} />
               <Route path="/thank-you" element={<ThankyouPage />} />
               <Route path="*" element={<Navigate to="/" />} />
+              
             </Routes>
           </main>
           <Toaster position="top-center" />

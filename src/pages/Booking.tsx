@@ -55,6 +55,7 @@ const Booking = () => {
   React.useEffect(() => {
     const isLoggedIn = !!localStorage.getItem('user');
     if (!isLoggedIn) {
+      // ✅ Pass the current path to the login page
       navigate('/login', { state: { from: location.pathname } });
     }
   }, [navigate, location.pathname]);
@@ -77,7 +78,6 @@ const Booking = () => {
       status: 'pending',
     };
 
-    // ✅ Add new booking at the top
     const existingBookings = JSON.parse(localStorage.getItem('bookings') || '[]');
     const updatedBookings = [newBooking, ...existingBookings];
     localStorage.setItem('bookings', JSON.stringify(updatedBookings));
@@ -139,11 +139,7 @@ const Booking = () => {
               <option value="09:00 AM">09:00 AM</option>
               <option value="10:00 AM">10:00 AM</option>
               <option value="11:00 AM">11:00 AM</option>
-              <option value="12:00 AM">12:00 AM</option>
-              <option value="01:00 AM">01:00 AM</option>
-              <option value="02:00 AM">02:00 AM</option>
-              <option value="03:00 AM">03:00 AM</option>
-              <option value="04:00 AM">14:00 AM</option>
+              <option value="12:00 PM">12:00 PM</option>
             </select>
             <select
               value={selectedTrainer}

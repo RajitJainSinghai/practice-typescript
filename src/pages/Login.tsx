@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('gyms/');
-    } catch (err) {
-      alert('Invalid credentials');
+      
+      // ✅ Redirect to stored path or default to gym booking page
+      const redirectTo = location.state?.from || '/gym-booking';
+      navigate(redirectTo);
+    } catch (error) {
+      alert('Login failed! Please try again.');
     }
   };
 
@@ -45,13 +49,15 @@ const Login = () => {
           Login
         </button>
       </form>
-      <p className="text-gray-600 mt-4 text-center">
-        Don’t have an account?{' '}
+
+      {/* Sign Up Option */}
+      <p className="mt-4 text-center text-sm text-gray-600">
+        Don't have an account?{' '}
         <Link
           to="/register"
-          className="text-blue-500 hover:text-blue-600 font-medium transition-all duration-200"
+          className="text-blue-500 hover:text-blue-600 font-medium transition-colors duration-200"
         >
-          Sign Up
+          Sign up here
         </Link>
       </p>
     </div>

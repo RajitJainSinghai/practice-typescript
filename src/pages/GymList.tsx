@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { MapPin, Clock, DollarSign } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -9,7 +9,7 @@ const SAMPLE_GYMS = [
     name: 'FitZone Elite',
     image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
     location: 'Downtown',
-    priceRange: '$20-50/session',
+    priceRange: '₹ 100',
     rating: 4.8,
     openHours: '6:00 AM - 10:00 PM',
   },
@@ -18,7 +18,7 @@ const SAMPLE_GYMS = [
     name: 'PowerHouse Gym',
     image: 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
     location: 'Westside',
-    priceRange: '$15-40/session',
+    priceRange: '₹ 120',
     rating: 4.6,
     openHours: '5:00 AM - 11:00 PM',
   },
@@ -27,21 +27,23 @@ const SAMPLE_GYMS = [
     name: 'CrossFit Central',
     image: 'https://images.unsplash.com/photo-1534367507873-d2d7e24c797f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
     location: 'Midtown',
-    priceRange: '$25-60/session',
+    priceRange: '₹ 140',
     rating: 4.9,
     openHours: '6:00 AM - 9:00 PM',
   },
 ];
 
 const GymList = () => {
-  const { user } = useAuth(); // ✅ Get the user state from AuthContext
+  const { user } = useAuth(); 
   const navigate = useNavigate();
 
   const handleBookNow = (gymId: string) => {
     if (user) {
-      navigate(`/booking/${gymId}`); // ✅ Redirect to booking page if logged in
+      // ✅ If logged in, navigate to booking page
+      navigate(`/booking/${gymId}`);
     } else {
-      navigate('/login'); // ✅ Redirect to login page if not logged in
+      // ✅ If not logged in, navigate to register and preserve state
+      navigate('/register', { state: { from: `/booking/${gymId}` } });
     }
   };
 
