@@ -1,31 +1,86 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { Dumbbell } from 'lucide-react';
 
 interface Props {
   setIsGymOwnerLoggedIn: (value: boolean) => void;
+  isGymOwnerLoggedIn: boolean;
 }
 
-const GymOwnerNavbar: React.FC<Props> = ({ setIsGymOwnerLoggedIn }) => {
+const GymOwnerNavbar = ({ setIsGymOwnerLoggedIn, isGymOwnerLoggedIn }: Props) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     localStorage.removeItem('gymOwnerId');
-    localStorage.removeItem('gymOwnerEmail');
     setIsGymOwnerLoggedIn(false);
     navigate('/gym-owner-login');
   };
 
+  // ✅ Function to check active state
+  const isActive = (path: string) => location.pathname === path;
+
   return (
-    <nav className="bg-gray-800 text-white p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <div>
-          <span className="text-xl font-bold cursor-pointer" onClick={() => navigate('/gym-owner-dashboard')}>
-            Gym Owner Dashboard
-          </span>
-        </div>
-        <div className="flex gap-4">
-          <button onClick={handleLogout} className="bg-red-500 px-4 py-2 rounded">
-            Logout
-          </button>
+    <nav className="bg-white shadow-md mb-6">
+      <div className="container mx-auto px-6">
+        <div className="flex justify-between items-center h-16">
+          {/* ✅ Logo + Title */}
+          <div className="flex items-center space-x-2">
+            <Dumbbell className="h-10 w-10 text-blue-500" />
+            <span className="text-2xl font-bold text-gray-800">Gym Owner Dashboard</span>
+          </div>
+
+          {/* ✅ Right Side Buttons */}
+          <div className="flex items-center space-x-4">
+            {isGymOwnerLoggedIn ? (
+              <>
+                {/* ✅ Dashboard Button */}
+                <Link
+                  to="/gym-owner-dashboard"
+                  className={`px-6 py-2 rounded-full transition duration-200 border ${
+                    isActive('/gym-owner-dashboard')
+                      ? 'bg-blue-500 text-white border-blue-500'
+                      : 'bg-white text-black border-black hover:bg-gray-100'
+                  }`}
+                >
+                  Dashboard
+                </Link>
+
+                {/* ✅ Logout Button */}
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-500 text-white px-6 py-2 rounded-full hover:bg-red-600 transition duration-200"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                {/* ✅ Login Button */}
+                <button
+                  onClick={() => navigate('/gym-owner-login')}
+                  className={`px-6 py-2 rounded-full transition duration-200 border ${
+                    isActive('/gym-owner-login')
+                      ? 'bg-blue-500 text-white border-blue-500'
+                      : 'bg-white text-black border-black hover:bg-gray-100'
+                  }`}
+                >
+                  Login
+                </button>
+
+                {/* ✅ Register Button */}
+                <button
+                  onClick={() => navigate('/gym-owner-register')}
+                  className={`px-6 py-2 rounded-full transition duration-200 border ${
+                    isActive('/gym-owner-register')
+                      ? 'bg-blue-500 text-white border-blue-500'
+                      : 'bg-white text-black border-black hover:bg-gray-100'
+                  }`}
+                >
+                  Register
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </nav>

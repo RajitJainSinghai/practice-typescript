@@ -1,63 +1,52 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 
 interface GymOwnerAuthContextType {
   gymOwnerId: string | null;
-  gymOwnerEmail: string | null;
-  login: (gymOwnerId: string, gymOwnerEmail: string) => void;
-  register: (id: string, email: string) => void;
+  email: string | null;
+  login: (id: string, email: string) => void;
   logout: () => void;
 }
 
-const GymOwnerAuthContext = createContext<GymOwnerAuthContextType | undefined>(undefined);
+const GymOwnerAuthContext = createContext<GymOwnerAuthContextType>({
+  gymOwnerId: null,
+  email: null,
+  login: () => {},
+  logout: () => {},
+});
 
 export const GymOwnerAuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [gymOwnerId, setGymOwnerId] = useState<string | null>(null);
-  const [gymOwnerEmail, setGymOwnerEmail] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    // ✅ localStorage se ownerId leke state set karo
-    const storedOwnerId = localStorage.getItem('gymOwnerId');
-    const storedOwnerEmail = localStorage.getItem('gymOwnerEmail');
-
-    if (storedOwnerId && storedOwnerEmail) {
-      setGymOwnerId(storedOwnerId);
-      setGymOwnerEmail(storedOwnerEmail);
+    // ✅ State ko localStorage se load karo taaki refresh ke baad login state na ude
+    const storedGymOwnerId = localStorage.getItem('gymOwnerId');
+    const storedEmail = localStorage.getItem('gymOwnerEmail');
+    if (storedGymOwnerId && storedEmail) {
+      setGymOwnerId(storedGymOwnerId);
+      setEmail(storedEmail);
     }
   }, []);
 
-  // ✅ Gym Owner Login
   const login = (id: string, email: string) => {
     setGymOwnerId(id);
-    setGymOwnerEmail(email);
+    setEmail(email);
     localStorage.setItem('gymOwnerId', id);
     localStorage.setItem('gymOwnerEmail', email);
   };
 
-  // ✅ Gym Owner Register => Register ke baad direct login call hoga
-  const register = (id: string, email: string) => {
-    login(id, email); // ✅ Register ke baad login state set karo
-  };
-
-  // ✅ Gym Owner Logout
   const logout = () => {
     setGymOwnerId(null);
-    setGymOwnerEmail(null);
+    setEmail(null);
     localStorage.removeItem('gymOwnerId');
     localStorage.removeItem('gymOwnerEmail');
   };
 
   return (
-    <GymOwnerAuthContext.Provider value={{ gymOwnerId, gymOwnerEmail, login, register, logout }}>
+    <GymOwnerAuthContext.Provider value={{ gymOwnerId, email, login, logout }}>
       {children}
     </GymOwnerAuthContext.Provider>
   );
 };
 
-// ✅ useGymOwnerAuth hook for easy access
-export const useGymOwnerAuth = () => {
-  const context = useContext(GymOwnerAuthContext);
-  if (!context) {
-    throw new Error('useGymOwnerAuth must be used within a GymOwnerAuthProvider');
-  }
-  return context;
-};
+export const useGymOwnerAuth = () => useContext(GymOwnerAuthContext);

@@ -45,17 +45,17 @@ const Home = () => {
         </div>
       </section>
 
-      {/* <section className="bg-white rounded-lg shadow-md p-8 max-w-5xl mx-auto">
+      <section className="bg-white rounded-lg shadow-md p-8 max-w-5xl mx-auto">
         <h2 className="text-3xl font-bold text-center mb-8">Are you a gym owner?</h2>
         <div className="text-center">
           <Link
-            to="/register"
+            to="/gym-owner-register"
             className="inline-block bg-gray-800 text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-gray-900 transition-colors"
           >
             List Your Gym
           </Link>
         </div>
-      </section> */}
+      </section>
     </div>
   );
 };

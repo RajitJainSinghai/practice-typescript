@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ID, databases } from '../appwrite/appwrite';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useGymOwnerAuth } from '../contexts/GymOwnerAuthContext';
 
 interface Props {
@@ -78,6 +78,15 @@ const GymOwnerRegister = ({ setIsGymOwnerLoggedIn }: Props) => {
         >
           Register
         </button>
+        <p className="mt-4 text-center text-sm text-gray-600">
+        Already have an account?{' '}
+        <Link
+          to="/gym-owner-login"
+          className="text-blue-500 hover:text-blue-600 font-medium transition-colors duration-200"
+        >
+          Login here
+        </Link>
+      </p>
       </form>
     </div>
   );

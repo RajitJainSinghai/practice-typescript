@@ -21,28 +21,134 @@ const App = () => {
 
   return (
     <Router>
-      {/* ✅ Show GymOwnerNavbar if logged in, otherwise show normal Navbar */}
-      {isGymOwnerLoggedIn ? (
-        <GymOwnerNavbar setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn} />
-      ) : (
-        <Navbar user={user} setUser={setUser} />
-      )}
-
       <div className="min-h-screen bg-gray-50">
         <main className="container mx-auto px-4 py-8">
+
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login setUser={setUser} />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/gyms" element={<GymList />} />
-            <Route path="/booking/:gymId" element={<Booking user={user} />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/gym-owner" element={<GymOwnerDashboard />} />
-            <Route path="/thank-you" element={<ThankyouPage />} />
-            <Route path="/gym-owner-register" element={<GymOwnerRegister setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn} />} />
-            <Route path="/register-gym" element={<GymRegister userId={localStorage.getItem('gymOwnerId') || ''} />} />
-            <Route path="/gym-owner-dashboard" element={<GymOwnerDashboard />} />
-            <Route path="/gym-owner-login" element={<GymOwnerLogin setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn} />} />
+            {/* ✅ Normal User Pages */}
+            <Route
+              path="/"
+              element={
+                <>
+                  <Navbar user={user} setUser={setUser} />
+                  <Home />
+                </>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <>
+                  <Navbar user={user} setUser={setUser} />
+                  <Login setUser={setUser} />
+                </>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <>
+                  <Navbar user={user} setUser={setUser} />
+                  <Register />
+                </>
+              }
+            />
+            <Route
+              path="/gyms"
+              element={
+                <>
+                  <Navbar user={user} setUser={setUser} />
+                  <GymList />
+                </>
+              }
+            />
+            <Route
+              path="/booking/:gymId"
+              element={
+                <>
+                  <Navbar user={user} setUser={setUser} />
+                  <Booking user={user} />
+                </>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <>
+                  <Navbar user={user} setUser={setUser} />
+                  <Profile />
+                </>
+              }
+            />
+            <Route
+              path="/thank-you"
+              element={
+                <>
+                  <Navbar user={user} setUser={setUser} />
+                  <ThankyouPage />
+                </>
+              }
+            />
+
+            {/* ✅ Gym Owner Register/Login Pages */}
+            <Route
+              path="/gym-owner-register"
+              element={
+                <>
+                  {/* ✅ GymOwnerNavbar hamesha dikhayenge */}
+                  <GymOwnerNavbar
+                    setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn}
+                    isGymOwnerLoggedIn={isGymOwnerLoggedIn}
+                  />
+                  <GymOwnerRegister setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn} />
+                </>
+              }
+            />
+            <Route
+              path="/gym-owner-login"
+              element={
+                <>
+                  {/* ✅ GymOwnerNavbar hamesha dikhayenge */}
+                  <GymOwnerNavbar
+                    setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn}
+                    isGymOwnerLoggedIn={isGymOwnerLoggedIn}
+                  />
+                  <GymOwnerLogin setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn} />
+                </>
+              }
+            />
+
+            {/* ✅ Gym Owner Pages (Only if logged in) */}
+            {isGymOwnerLoggedIn && (
+              <>
+                <Route
+                  path="/register-gym"
+                  element={
+                    <>
+                      <GymOwnerNavbar
+                        setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn}
+                        isGymOwnerLoggedIn={isGymOwnerLoggedIn}
+                      />
+                      <GymRegister userId={localStorage.getItem('gymOwnerId') || ''} />
+                    </>
+                  }
+                />
+                <Route
+                  path="/gym-owner-dashboard"
+                  element={
+                    <>
+                      <GymOwnerNavbar
+                        setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn}
+                        isGymOwnerLoggedIn={isGymOwnerLoggedIn}
+                      />
+                      <GymOwnerDashboard />
+                    </>
+                  }
+                />
+              </>
+            )}
+
+            {/* ✅ Redirect Invalid Routes */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>

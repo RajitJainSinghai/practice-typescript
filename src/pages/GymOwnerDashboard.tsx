@@ -22,7 +22,7 @@ const GymOwnerDashboard = () => {
       setLoading(true);
 
       try {
-        // ✅ Fetch gyms connected to the logged-in gym owner
+        // ✅ Fetch gyms directly from collection
         const response = await databases.listDocuments(
           import.meta.env.VITE_APPWRITE_DATABASE_ID,
           import.meta.env.VITE_APPWRITE_GYM_COLLECTION_ID,
@@ -30,21 +30,28 @@ const GymOwnerDashboard = () => {
         );
 
         if (response.documents.length) {
+          // ✅ Async image fetch for real-time loading
           const gymsWithImages = await Promise.all(
             response.documents.map(async (gym) => {
-              let imageUrl = '';
+              let imageUrl = gym.image;
               if (gym.image) {
-                // ✅ Fetch image from storage
-                imageUrl = storage.getFilePreview(
-                  import.meta.env.VITE_APPWRITE_GYM_BUCKET_ID,
-                  gym.image
-                ).href;
+                try {
+                  const filePreview = storage.getFilePreview(
+                    import.meta.env.VITE_APPWRITE_GYM_BUCKET_ID,
+                    gym.image
+                  );
+                  imageUrl = filePreview.href;
+                } catch (err) {
+                  console.error(`Failed to load image for ${gym.gymName}:`, err);
+                }
               }
               return { ...gym, image: imageUrl };
             })
           );
 
           setGyms(gymsWithImages);
+        } else {
+          setGyms([]);
         }
       } catch (error) {
         console.error('Failed to fetch gyms:', error);
@@ -67,6 +74,7 @@ const GymOwnerDashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {gyms.map((gym) => (
             <div key={gym.$id} className="bg-white shadow-md p-4 rounded-md">
+              {/* ✅ Show gym image directly */}
               {gym.image ? (
                 <img
                   src={gym.image}
