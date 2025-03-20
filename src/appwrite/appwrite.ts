@@ -1,4 +1,4 @@
-import { Client, Account, Databases, ID } from 'appwrite';
+import { Client, Account, Databases, Storage, ID } from 'appwrite';
 
 const client = new Client();
 
@@ -47,5 +47,8 @@ export const logoutUser = async () => {
     throw error;
   }
 };
+
+
+export const storage = new Storage(client);
 
 export { client, account, databases, ID };
