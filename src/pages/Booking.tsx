@@ -28,9 +28,9 @@ const Booking = () => {
     ? gym?.trainers.find((t) => t.id === selectedTrainer)?.price || 0
     : 0;
 
-  const totalBeforeGST = gymFees + trainerFees;
-  const gstAmount = totalBeforeGST * 0.18;
-  const totalAmount = totalBeforeGST + gstAmount;
+  // ✅ GST only on gym fees
+  const gstAmount = gymFees * 0.18;
+  const totalAmount = gymFees + trainerFees + gstAmount;
 
   const handleBooking = async () => {
     if (!selectedDate || !selectedTime) {
@@ -67,7 +67,7 @@ const Booking = () => {
               ID.unique(),
               {
                 gymName: gym?.name,
-                gymImage: gym?.image || '', // ✅ Saving gym image
+                gymImage: gym?.image || '',
                 userId: user?.$id,
                 userName: user?.name,
                 date: new Date(selectedDate).toISOString(),
@@ -145,9 +145,30 @@ const Booking = () => {
             </select>
           </div>
 
+          {/* ✅ Payment Summary */}
+          <div className="mt-6 bg-gray-100 p-4 rounded-md">
+            <h3 className="text-lg font-semibold text-gray-700">Payment Summary</h3>
+            <div className="flex justify-between text-gray-600 mt-2">
+              <span>Gym Fees:</span>
+              <span>₹{gymFees}</span>
+            </div>
+            <div className="flex justify-between text-gray-600 mt-1">
+              <span>Trainer Fees:</span>
+              <span>₹{trainerFees}</span>
+            </div>
+            <div className="flex justify-between text-gray-600 mt-1">
+              <span>GST (18% on Gym Fees):</span>
+              <span>₹{gstAmount.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between font-bold text-gray-800 mt-2">
+              <span>Total Amount:</span>
+              <span>₹{totalAmount.toFixed(2)}</span>
+            </div>
+          </div>
+
           <button
             onClick={handleBooking}
-            className="bg-blue-500 text-white mt-4 w-full py-2 rounded-md"
+            className="bg-blue-500 text-white mt-4 w-full py-2 rounded-md hover:bg-blue-600"
           >
             Proceed to Payment
           </button>
