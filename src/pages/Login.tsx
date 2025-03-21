@@ -8,24 +8,26 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); // Reset error before attempting login
+    setError(null);
+    setIsSubmitting(true);
 
     try {
       await login(email, password);
       toast.success('Login successful!');
-
-      // ✅ Redirect to the selected gym's booking page or fallback to '/gyms'
       const redirectPath = location.state?.from || '/gyms';
       navigate(redirectPath);
     } catch (error) {
       console.error('Login error:', error);
       setError('Login failed! Please check your credentials and try again.');
       toast.error('Login failed! Please check your credentials.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -40,7 +42,6 @@ const Login = () => {
       )}
 
       <form onSubmit={handleLogin} className="space-y-6">
-        {/* Email Input */}
         <input
           type="email"
           placeholder="Email"
@@ -50,7 +51,6 @@ const Login = () => {
           className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 p-3 w-full rounded-lg outline-none transition-all duration-200"
         />
 
-        {/* Password Input */}
         <input
           type="password"
           placeholder="Password"
@@ -60,21 +60,20 @@ const Login = () => {
           className="border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 p-3 w-full rounded-lg outline-none transition-all duration-200"
         />
 
-        {/* Login Button */}
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white font-medium p-3 w-full rounded-lg transition-all duration-200"
+          disabled={isSubmitting}
+          className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-2 rounded-lg hover:shadow-xl hover:from-blue-600 hover:to-purple-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Login
+          {isSubmitting ? 'Logging in...' : 'Login'}
         </button>
       </form>
 
-      {/* Register Option */}
       <p className="mt-4 text-center text-sm text-gray-600">
         Don't have an account?{' '}
         <Link
           to="/register"
-          state={{ from: location.state?.from }} // ✅ Pass the state to register
+          state={{ from: location.state?.from }}
           className="text-blue-500 hover:text-blue-600 font-medium transition-colors duration-200"
         >
           Sign up here

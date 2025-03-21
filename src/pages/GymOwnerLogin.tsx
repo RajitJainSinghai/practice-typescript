@@ -76,7 +76,7 @@ const GymOwnerLogin = ({ setIsGymOwnerLoggedIn }: Props) => {
         />
         <button 
           type="submit" 
-          className="bg-blue-500 text-white px-4 py-2 rounded w-full"
+          className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-2 rounded-lg hover:shadow-xl hover:from-blue-600 hover:to-purple-600 transition"
           disabled={loading}
         >
           {loading ? 'Logging in...' : 'Login'}

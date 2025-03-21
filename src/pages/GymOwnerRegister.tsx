@@ -14,33 +14,35 @@ const GymOwnerRegister = ({ setIsGymOwnerLoggedIn }: Props) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
-      // ✅ Create Gym Owner Document in Collection
       const response = await databases.createDocument(
         import.meta.env.VITE_APPWRITE_DATABASE_ID,
-        import.meta.env.VITE_APPWRITE_GYM_OWNER_COLLECTION_ID, // Gym Owner Collection ID
+        import.meta.env.VITE_APPWRITE_GYM_OWNER_COLLECTION_ID,
         ID.unique(),
         {
           name,
           email,
-          password, // ✅ Store password in the collection
-          gymId: [], // ✅ Initialize gymId as an empty array
+          password,
+          gymId: [],
         }
       );
 
-      // ✅ Registration ke turant baad login + state update karo
       login(response.$id, email);
       setIsGymOwnerLoggedIn(true);
 
       alert('Registration successful! Redirecting to dashboard...');
-      navigate('/register-gym'); // ✅ Redirect to dashboard
+      navigate('/register-gym');
     } catch (error) {
       console.error('Registration failed:', error);
       alert('Failed to register gym owner');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -74,19 +76,20 @@ const GymOwnerRegister = ({ setIsGymOwnerLoggedIn }: Props) => {
         />
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-700"
+          disabled={isSubmitting}
+          className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-2 rounded-lg hover:shadow-xl hover:from-blue-600 hover:to-purple-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Register
+          {isSubmitting ? 'Registering...' : 'Register'}
         </button>
         <p className="mt-4 text-center text-sm text-gray-600">
-        Already have an account?{' '}
-        <Link
-          to="/gym-owner-login"
-          className="text-blue-500 hover:text-blue-600 font-medium transition-colors duration-200"
-        >
-          Login here
-        </Link>
-      </p>
+          Already have an account?{' '}
+          <Link
+            to="/gym-owner-login"
+            className="text-blue-500 hover:text-blue-600 font-medium transition-colors duration-200"
+          >
+            Login here
+          </Link>
+        </p>
       </form>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { databases, storage } from '../appwrite/appwrite';
 import { useGymOwnerAuth } from '../contexts/GymOwnerAuthContext';
+import { Link } from 'react-router-dom';
 
 interface Gym {
   $id: string;
@@ -69,7 +70,15 @@ const GymOwnerDashboard = () => {
     <div>
       <h2 className="text-2xl font-bold mb-4">My Gyms</h2>
       {gyms.length === 0 ? (
-        <p>No gyms found</p>
+        <>
+        <p className='mb-12'>No gyms found</p>
+        <Link
+                    to="/register-gym"
+                    className="w-full flex justify-center bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-2 rounded-lg hover:shadow-xl hover:from-blue-600 hover:to-purple-600 transition"
+                  >
+                    Register your first gym
+                  </Link>
+                  </>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {gyms.map((gym) => (

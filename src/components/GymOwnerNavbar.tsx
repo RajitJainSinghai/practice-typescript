@@ -36,9 +36,9 @@ const GymOwnerNavbar = ({ setIsGymOwnerLoggedIn, isGymOwnerLoggedIn }: Props) =>
                 {/* ✅ Dashboard Button */}
                 <Link
                   to="/gym-owner-dashboard"
-                  className={`px-6 py-2 rounded-full transition duration-200 border ${
+                  className={`px-6 py-2 rounded-lg  transition duration-200 border ${
                     isActive('/gym-owner-dashboard')
-                      ? 'bg-blue-500 text-white border-blue-500'
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-2 rounded-lg hover:shadow-xl hover:from-blue-600 hover:to-purple-600 transition'
                       : 'bg-white text-black border-black hover:bg-gray-100'
                   }`}
                 >
@@ -48,7 +48,7 @@ const GymOwnerNavbar = ({ setIsGymOwnerLoggedIn, isGymOwnerLoggedIn }: Props) =>
                 {/* ✅ Logout Button */}
                 <button
                   onClick={handleLogout}
-                  className="bg-red-500 text-white px-6 py-2 rounded-full hover:bg-red-600 transition duration-200"
+                  className="bg-red-500 text-white px-6 py-2 rounded-lg  hover:bg-red-600 transition duration-200"
                 >
                   Logout
                 </button>
@@ -58,9 +58,9 @@ const GymOwnerNavbar = ({ setIsGymOwnerLoggedIn, isGymOwnerLoggedIn }: Props) =>
                 {/* ✅ Login Button */}
                 <button
                   onClick={() => navigate('/gym-owner-login')}
-                  className={`px-6 py-2 rounded-full transition duration-200 border ${
+                  className={`px-6 py-2 rounded-lg  transition duration-200 border ${
                     isActive('/gym-owner-login')
-                      ? 'bg-blue-500 text-white border-blue-500'
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-2 rounded-lg hover:shadow-xl hover:from-blue-600 hover:to-purple-600 transition'
                       : 'bg-white text-black border-black hover:bg-gray-100'
                   }`}
                 >
@@ -70,9 +70,9 @@ const GymOwnerNavbar = ({ setIsGymOwnerLoggedIn, isGymOwnerLoggedIn }: Props) =>
                 {/* ✅ Register Button */}
                 <button
                   onClick={() => navigate('/gym-owner-register')}
-                  className={`px-6 py-2 rounded-full transition duration-200 border ${
+                  className={`px-6 py-2 rounded-lg  transition duration-200 border ${
                     isActive('/gym-owner-register')
-                      ? 'bg-blue-500 text-white border-blue-500'
+                      ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-2 rounded-lg hover:shadow-xl hover:from-blue-600 hover:to-purple-600 transition'
                       : 'bg-white text-black border-black hover:bg-gray-100'
                   }`}
                 >
