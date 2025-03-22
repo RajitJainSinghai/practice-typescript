@@ -1,4 +1,4 @@
-import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { useState } from 'react';
 import Navbar from './components/Navbar';
@@ -23,6 +23,7 @@ const App = () => {
     <Router>
       <div className="min-h-screen bg-gray-50">
         <main className="container mx-auto px-4 py-8">
+
           <Routes>
             {/* ✅ Normal User Pages */}
             <Route
@@ -94,7 +95,11 @@ const App = () => {
               path="/gym-owner-register"
               element={
                 <>
-                  <GymOwnerNavbar setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn} isGymOwnerLoggedIn={isGymOwnerLoggedIn} />
+                  {/* ✅ GymOwnerNavbar hamesha dikhayenge */}
+                  <GymOwnerNavbar
+                    setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn}
+                    isGymOwnerLoggedIn={isGymOwnerLoggedIn}
+                  />
                   <GymOwnerRegister setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn} />
                 </>
               }
@@ -103,7 +108,11 @@ const App = () => {
               path="/gym-owner-login"
               element={
                 <>
-                  <GymOwnerNavbar setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn} isGymOwnerLoggedIn={isGymOwnerLoggedIn} />
+                  {/* ✅ GymOwnerNavbar hamesha dikhayenge */}
+                  <GymOwnerNavbar
+                    setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn}
+                    isGymOwnerLoggedIn={isGymOwnerLoggedIn}
+                  />
                   <GymOwnerLogin setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn} />
                 </>
               }
@@ -116,7 +125,10 @@ const App = () => {
                   path="/register-gym"
                   element={
                     <>
-                      <GymOwnerNavbar setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn} isGymOwnerLoggedIn={isGymOwnerLoggedIn} />
+                      <GymOwnerNavbar
+                        setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn}
+                        isGymOwnerLoggedIn={isGymOwnerLoggedIn}
+                      />
                       <GymRegister userId={localStorage.getItem('gymOwnerId') || ''} />
                     </>
                   }
@@ -125,7 +137,10 @@ const App = () => {
                   path="/gym-owner-dashboard"
                   element={
                     <>
-                      <GymOwnerNavbar setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn} isGymOwnerLoggedIn={isGymOwnerLoggedIn} />
+                      <GymOwnerNavbar
+                        setIsGymOwnerLoggedIn={setIsGymOwnerLoggedIn}
+                        isGymOwnerLoggedIn={isGymOwnerLoggedIn}
+                      />
                       <GymOwnerDashboard />
                     </>
                   }
