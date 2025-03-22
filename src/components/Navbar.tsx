@@ -24,7 +24,7 @@ const Navbar = () => {
           {/* ✅ Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <Dumbbell className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold text-gray-800">GymBook</span>
+            <span className="text-xl font-bold text-gray-800">Book My Gym</span>
           </Link>
 
           {/* ✅ Desktop Menu */}

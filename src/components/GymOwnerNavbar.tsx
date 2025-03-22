@@ -26,11 +26,12 @@ const GymOwnerNavbar = ({ setIsGymOwnerLoggedIn, isGymOwnerLoggedIn }: Props) =>
           {/* ✅ Logo + Title */}
           <div className="flex items-center space-x-2">
             <Dumbbell className="h-10 w-10 text-blue-500" />
-            <span className="text-2xl font-bold text-gray-800">Gym Owner Dashboard</span>
+            <span className="text-2xl font-bold text-gray-800">Book My Gym</span>
           </div>
 
           {/* ✅ Right Side Buttons */}
           <div className="flex items-center space-x-4">
+            
             {isGymOwnerLoggedIn ? (
               <>
                 {/* ✅ Dashboard Button */}
