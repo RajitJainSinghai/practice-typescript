@@ -3,8 +3,8 @@ import { Client, Account, Databases, Storage, ID } from 'appwrite';
 const client = new Client();
 
 client
-  .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT) // Your Appwrite endpoint
-  .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID); // Your Project ID
+  .setEndpoint("https://cloud.appwrite.io/v1") // Your Appwrite endpoint
+  .setProject("67da7b920016a4977fd4"); // Your Project ID
 
 const account = new Account(client);
 const databases = new Databases(client);
